@@ -21,6 +21,7 @@ My Portfolio:
 - Current price
 
 ```python
+#Print the price for each stock
 my_list = ['ETHI', 'IEM', 'IOO', 'IOZ','IXJ','NDQ','SYI']
 
 for stock in my_list:
