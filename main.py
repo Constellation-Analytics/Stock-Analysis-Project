@@ -12,7 +12,7 @@ def get_stock_data(ticker="AAPL"):
     return {
         "ticker": ticker,
         "date": latest.name.date(),
-        "close": latest["Close"]
+        "close": float(latest["Close"])  # Convert to native float
     }
 
 def insert_to_db(data):
