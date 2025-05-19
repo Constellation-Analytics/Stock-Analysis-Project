@@ -21,3 +21,5 @@ How is the general stock market trending ?
 - Dividends will be paid within 1 month
 - Dividends have been paid
 
+## Summary
+I want this project to provide information on my share portfolio, the wider stock market, and sent me alerts based on events
