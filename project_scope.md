@@ -16,6 +16,7 @@ How is the general stock market trending ?
 - All Ordinaries
 - Calculate the Exponential Moving Average
 
-## Alert me when:
-- significant variance in stock price compared to the moving average
+## Alert me when
+- Significant variance in stock price compared to the moving average
+- Dividends will be paid within 1 month
 
