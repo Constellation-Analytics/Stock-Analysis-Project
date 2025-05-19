@@ -19,4 +19,5 @@ How is the general stock market trending ?
 ## Alert me when
 - Significant variance in stock price compared to the moving average
 - Dividends will be paid within 1 month
+- Dividends have been paid
 
