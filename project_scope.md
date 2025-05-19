@@ -3,6 +3,9 @@
 ## My share portfolio
 
 How have my personal stocks performed over time? 
+What is the dividend frequency ? 
+When can i expect the next dividend ? 
+What is the average dividend ?
 
 *What is performance?*
 - Growth over time
