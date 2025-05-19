@@ -3,15 +3,18 @@
 ## My share portfolio
 
 How have my personal stocks performed over time? 
-What is the dividend frequency ? 
-When can i expect the next dividend ? 
-What is the average dividend ?
 
 *What is performance?*
 - Growth over time
 - Growth compared to common indexs
 - Growth compared to CPI
-- Dividends payed 
+- Dividends payed
+
+What is the dividend frequency ? 
+
+When can i expect the next dividend ? 
+
+What is the average dividend ?
 
 ## The overall stock market
 How is the general stock market trending ? 
@@ -25,4 +28,4 @@ How is the general stock market trending ?
 - Dividends have been paid
 
 ## Summary
-I want this project to provide information on my share portfolio, the wider stock market, and sent me alerts based on events
+I want this project to provide information on my share portfolio, the wider stock market, and send me alerts based on events
