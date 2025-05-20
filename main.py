@@ -1,6 +1,7 @@
 import yfinance as yf
 import psycopg2
 import os
+from datetime import datetime
 
 # Load environment variables from GitHub Secrets
 NEON_DB = os.getenv("NEON_DB")
@@ -11,8 +12,8 @@ def get_stock_data(ticker="AAPL"):
     latest = hist.iloc[-1]
     return {
         "ticker": ticker,
-        "date": latest.name.date(),
-        "close": float(latest["Close"])  # Convert to native float
+        "date": datetime.now().date(),  # <-- use current date instead
+        "close": float(latest["Close"])
     }
 
 def insert_to_db(data):
