@@ -27,17 +27,19 @@ df_all = pd.concat(df_index, ignore_index=True)
 df_all
 ```
 
+Current price
 ```python
 import yfinance as yf
 
-# Load the All Ordinaries Index
-aord = yf.Ticker("^AORD")
+#Create find the current price for each index
+index_list = ['^AORD', '^AXJO']
 
-# Get recent historical data
-aord_df = aord.history(period="5d")  # Last 5 days
+df_index = []
 
-# Get the latest price
-aord_current = all_ords.info["regularMarketPrice"]
+for stock in index_list:
+    tick = yf.Ticker(stock)
+    print(stock+":",tick.info["regularMarketPrice"])
+
 ```
 
 My Portfolio:
