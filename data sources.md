@@ -30,15 +30,19 @@ df_all
 Current price
 ```python
 import yfinance as yf
+import pandas as pd
 
-#Create find the current price for each index
 index_list = ['^AORD', '^AXJO']
 
-df_index = []
+data = []
 
 for stock in index_list:
     tick = yf.Ticker(stock)
-    print(stock+":",tick.info["regularMarketPrice"])
+    price = tick.info.get("regularMarketPrice")  # safer with .get()
+    data.append({"Stock": stock, "Price": price})
+
+df_index = pd.DataFrame(data)
+df_index
 
 ```
 
