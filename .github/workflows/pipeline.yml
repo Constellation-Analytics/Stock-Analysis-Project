@@ -2,7 +2,7 @@ name: Run yfinance pipeline
 
 on:
   schedule:
-    - cron: "0 9 * * 1-5" # Every weekday at 9am UTC
+    - cron: "10 9 * * 1-5"  # 11:10 AM France time (Mon–Fri)
   workflow_dispatch:     # Allow manual trigger
 
 jobs:
