@@ -9,22 +9,23 @@ Historical Data
 import yfinance as yf
 import pandas as pd
 
-#Create a df with the close history for each stock
+#Create a df with the close history for each stock om a list 
+def get_stocks(stock_list,period):
+    df_index = []
+    for stock in stock_list:
+        tick = yf.Ticker(stock)
+        df = tick.history(period=period)
+        df['Stock'] = stock
+        df.reset_index(inplace = True)
+        df['Date'] = df['Date'].dt.date
+        df_filtered = df[['Date','Stock','Close']]
+        df_index.append(df_filtered)
+        df_all = pd.concat(df_index, ignore_index=True)
+    return df_all
+
+#example 
 index_list = ['^AORD', '^AXJO']
-
-df_index = []
-
-for stock in index_list:
-    tick = yf.Ticker(stock)
-    df = tick.history(period="1d")
-    df['Stock'] = stock
-    df.reset_index(inplace = True)
-    df['Date'] = df['Date'].dt.date
-    df_filtered = df[['Date','Stock','Close']]
-    df_index.append(df_filtered)
-
-df_all = pd.concat(df_index, ignore_index=True)
-df_all
+get_stocks(index_list,"5d")
 ```
 
 Current price
