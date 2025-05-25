@@ -1,6 +1,6 @@
 # yfinance data sources
 
-All Ordinaries Index:
+## All Ordinaries Index:
 - Historical Data
 - Current price
 
@@ -49,7 +49,7 @@ df_index
 
 ```
 
-My Portfolio:
+## My Portfolio:
 - Current price
 - Historical Data
 - Dividends history
