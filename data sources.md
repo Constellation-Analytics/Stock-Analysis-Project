@@ -1,8 +1,7 @@
 # yfinance data sources
 
 ## All Ordinaries Index:
-- Historical Data
-- Current price
+What we need:  [Historical Data, Current price]
 
 Historical Data
 ```python
