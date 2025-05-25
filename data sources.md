@@ -44,7 +44,7 @@ get_stock_history(index_list,"5y").head()
 
 ```
 
-Current price
+#### Current price
 ```python
 import yfinance as yf
 import pandas as pd
@@ -64,12 +64,9 @@ df_index
 ```
 
 ## My Portfolio:
-- Current price
-- Historical Data
-- Dividends history
-- Last close price
-- 
-Current price
+What we need: [Current price, Historical Data, Dividends history, Last close price]
+ 
+#### Current price
 ```python
 import yfinance as yf
 
@@ -80,7 +77,7 @@ for stock in my_list:
     tick = yf.Ticker(stock)
     print(stock+":",tick.info["regularMarketPrice"])
 ```
-Historical Data
+#### Historical Data
 ```python
 import yfinance as yf
 import pandas as pd
@@ -120,6 +117,7 @@ index_list = ['^AORD', '^AXJO']
 get_stock_history(index_list,"5y").head()
 
 ```
+#### Dividends history
 ```python
 import yfinance as yf
 
@@ -128,28 +126,10 @@ my_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
 
 for stock in my_list:
     try:
-        tick = yf.Ticker(stock)
+        ticker = yf.Ticker(stock)
         div = ticker.dividends
         print(f"{stock}: {div}")
 
     except Exception as e:
         print(f"{stock}: Error - {e}")
-```
-```python
-import yfinance as yf
-import pandas as pd
-
-my_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
-
-df_stocks = []
-for stock in my_list:
-    tick = yf.Ticker(stock)
-    df = tick.history(period="1d")
-    df['Stock'] = stock
-    df.reset_index(inplace = True)
-    df_filtered = df[['Date','Stock','Close']]
-    df_stocks.append(df_filtered)
-
-df_all = pd.concat(df_stocks, ignore_index=True)
-df_all
 ```
