@@ -9,7 +9,18 @@ import yfinance as yf
 import pandas as pd
 
 #Create a df with the close history for each stock om a list 
-def get_stock_history(stock_list,period):
+def get_stock_history(stock_list, period, spans=[30, 60, 180]):
+    """
+    Fetch historical closing prices and EMA for a list of stocks.
+
+    Parameters:
+        stock_list (list): List of stock tickers.
+        period (str): Time period for the history (e.g. '1y', '5y').
+        spans (list): EMA periods to calculate.
+
+    Returns:
+        DataFrame: Combined stock history with EMA columns.
+    """
 
     #Create empty list
     df_index = []
@@ -21,16 +32,14 @@ def get_stock_history(stock_list,period):
         df['Stock'] = stock
         df.reset_index(inplace = True)
         df['Date'] = df['Date'].dt.date
-        df_filtered = df[['Date','Stock','Close']]
-        df_index.append(df_filtered)
+        df = df[['Date','Stock','Close']]
+        #Add EMA columns
+        for span in spans:
+            df[f'EMA_{span}'] = df['Close'].ewm(span=span, adjust=False).mean()
+        df_index.append(df)
 
     #Combine the dataframes for each stock in the list
     df_all = pd.concat(df_index, ignore_index=True)
-
-    #Add EMA columns
-    df_all['EMA_30'] = df_all['Close'].ewm(span=30, adjust=False).mean()
-    df_all['EMA_60'] = df_all['Close'].ewm(span=60, adjust=False).mean()
-    df_all['EMA_180'] = df_all['Close'].ewm(span=180, adjust=False).mean()
 
     # sort values and reset the index
     df_all = df_all.sort_values(by='Date', ascending=False)
@@ -41,6 +50,7 @@ def get_stock_history(stock_list,period):
 #example 
 index_list = ['^AORD', '^AXJO']
 get_stock_history(index_list,"5y").head()
+
 
 ```
 
