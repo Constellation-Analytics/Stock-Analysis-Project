@@ -7,50 +7,57 @@ What we need:  [Historical Data, Current price]
 ```python
 import yfinance as yf
 import pandas as pd
+from datetime import datetime
 
-#Create a df with the close history for each stock om a list 
-def get_stock_history(stock_list, period, spans=[30, 60, 180]):
+def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     """
-    Fetch historical closing prices and EMA for a list of stocks.
+    Fetch historical closing prices and exponential moving averages (EMAs)
+    for a list of stocks using Yahoo Finance data.
 
     Parameters:
-        stock_list (list): List of stock tickers.
-        period (str): Time period for the history (e.g. '1y', '5y').
-        spans (list): EMA periods to calculate.
+        stock_list (list): List of stock ticker symbols (e.g., ['^AORD', '^AXJO']).
+        period (str): Time range for fetching historical data (e.g., '1y', '5y').
+        spans (list): List of integer values representing EMA periods to calculate.
+        watermark (str or datetime.date, optional): Only return rows with a date
+            after this value. Can be a string ('YYYY-MM-DD') or a date object.
 
     Returns:
-        DataFrame: Combined stock history with EMA columns.
+        pd.DataFrame: Combined stock data including Date, Stock, Close, and EMA columns.
     """
 
-    #Create empty list
     df_index = []
 
-    #Create loop actions for each stock in a list of stocks
     for stock in stock_list:
         tick = yf.Ticker(stock)
         df = tick.history(period=period)
         df['Stock'] = stock
-        df.reset_index(inplace = True)
+        df.reset_index(inplace=True)
         df['Date'] = df['Date'].dt.date
-        df = df[['Date','Stock','Close']]
-        #Add EMA columns
+        df = df[['Date', 'Stock', 'Close']]
+
+        # Add EMA columns
         for span in spans:
             df[f'EMA_{span}'] = df['Close'].ewm(span=span, adjust=False).mean()
+
         df_index.append(df)
 
-    #Combine the dataframes for each stock in the list
+    # Combine all stock data
     df_all = pd.concat(df_index, ignore_index=True)
 
-    # sort values and reset the index
-    df_all = df_all.sort_values(by='Date', ascending=False)
-    df_all = df_all.reset_index(drop=True)
+    # Filter by watermark if provided
+    if watermark:
+        if isinstance(watermark, str):
+            watermark = datetime.strptime(watermark, '%Y-%m-%d').date()
+        df_all = df_all[df_all['Date'] > watermark]
+
+    # Sort by date (descending) and reset index
+    df_all = df_all.sort_values(by='Date', ascending=False).reset_index(drop=True)
     
     return df_all
 
-#example 
+# Example usage
 index_list = ['^AORD', '^AXJO']
-get_stock_history(index_list,"5y").head()
-
+get_stock_history(index_list, "5y")
 
 ```
 
