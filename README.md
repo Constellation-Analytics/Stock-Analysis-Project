@@ -12,12 +12,13 @@ This is a full end-to-end **cloud-based** data pipeline project that tracks the 
   - Growth over time
   - Comparison against market indices (ASX200, All Ordinaries)
   - Comparison against inflation (CPI)
+- Monitor dividends
   - Dividends paid — value, frequency, and averages
   - Forecast next dividend dates
-  - Trigger alerts for:
-    - Large variances from moving averages
-    - Upcoming dividend payouts
-    - Recently paid dividends
+- Trigger alerts for:
+  - Large variances from moving averages
+  - Upcoming dividend payouts
+  - Recently paid dividends
 
 ### 📊 The Wider Market
 - Monitor Australian stock indices (e.g. `^AXJO`, `^AORD`)
