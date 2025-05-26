@@ -1,6 +1,6 @@
 # yfinance data sources
 
-## All Ordinaries Index:
+## Market Index:
 What we need:  [Historical Data, Current price]
 
 #### Historical Data
