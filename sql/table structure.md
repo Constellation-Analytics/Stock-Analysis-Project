@@ -1,5 +1,5 @@
 # SQL Table Structure
-### stk_personal
+### personal_stk_close
 
 | Column | Data Type |
 |--------|-----------|
@@ -10,8 +10,16 @@
 | EMA 60 | int       |
 | EMA 180| int       |
 
+### personal_stk_price
 
-### stk_market
+| Column | Data Type |
+|--------|-----------|
+| stock   | varchar   |
+| price   | int   |
+| datetime_utc  | datetime  |
+
+
+### market_stk_close
 
 | Column | Data Type |
 |--------|-----------|
