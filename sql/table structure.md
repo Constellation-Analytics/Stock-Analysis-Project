@@ -42,5 +42,13 @@
 | price    | int        |
 | datetime_utc  | datetime  |
 
+### personal_stk_dividend
+
+| Column   | Data Type  |
+|--------  |----------- |
+| date   | date      |
+| stock    | varchar    |
+| dividend  | varchar  |
+
 
 
