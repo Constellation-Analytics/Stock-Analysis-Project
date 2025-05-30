@@ -32,6 +32,22 @@ def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False)
     with engine.connect() as connection:
         data.to_sql(table, connection, if_exists="append", index=False)
 
+def get_max_date(column: str, table: str):
+    """
+    Gets the maximum date from the specified PostgreSQL column and table
+
+    Args:
+        column (str): Name of the target column.
+        table (str): Name of the target table.
+        
+    Returns:
+        datetime.date object for the specified PostgreSQL column and table
+    """
+    with engine.connect() as conn:
+        result = conn.execute(text(f'SELECT MAX({column}) FROM {table}'))
+        max_date = result.fetchone()[0] 
+        
+    return max_date
 
 def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     """
