@@ -65,18 +65,33 @@ get_stock_history(index_list, "5y")
 ```python
 import yfinance as yf
 import pandas as pd
+from datetime import datetime, timezone
 
+def get_current_price(stock_list):
+    """
+    Fetches the current market price for a list of stock tickers.
+
+    Parameters:
+    - stock_list (list): A list of stock ticker symbols (e.g., ['^AORD', '^AXJO']).
+
+    Returns:
+    - DataFrame: A DataFrame containing the stock symbol, current market price, and 
+      the UTC datetime when the data was fetched.
+    """
+    data = []
+    
+    for stock in stock_list:
+        tick = yf.Ticker(stock)
+        price = tick.info.get("regularMarketPrice")
+        now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+        data.append({"stock": stock, "price": price, "datetime_utc": now_utc})
+    
+    return pd.DataFrame(data)
+
+# Example usage
 index_list = ['^AORD', '^AXJO']
+get_current_price(index_list)
 
-data = []
-
-for stock in index_list:
-    tick = yf.Ticker(stock)
-    price = tick.info.get("regularMarketPrice")  # safer with .get()
-    data.append({"Stock": stock, "Price": price})
-
-df_index = pd.DataFrame(data)
-df_index
 
 ```
 
