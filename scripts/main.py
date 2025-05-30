@@ -18,12 +18,12 @@ engine = create_engine(NEON_DB)
 def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
     """
     Inserts data into the specified PostgreSQL table.
-
-    Parameters:
-    - data (pd.DataFrame): DataFrame to insert.
-    - table (str): Name of the target table.
-    - engine: SQLAlchemy engine object.
-    - truncate (bool): If True, truncates the table before inserting new data.
+    
+    Args:
+        data (pd.DataFrame): DataFrame to insert.
+        table (str): Name of the target table.
+        engine: SQLAlchemy engine object.
+        truncate (bool, optional): If True, truncates the table before inserting new data. Defaults to False.
     """
     if truncate:
         with engine.begin() as conn:
@@ -37,16 +37,15 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     """
     Fetch historical closing prices and exponential moving averages (EMAs)
     for a list of stocks using Yahoo Finance data.
-
-    Parameters:
+    
+    Args:
         stock_list (list): List of stock ticker symbols (e.g., ['^AORD', '^AXJO']).
         period (str): Time range for fetching historical data (e.g., '1y', '5y').
-        spans (list): List of integer values representing EMA periods to calculate.
-        watermark (str or datetime.date, optional): Only return rows with a date
-            after this value. Can be a string ('YYYY-MM-DD') or a date object.
-
+        spans (list, optional): List of integer values representing EMA periods to calculate. Defaults to [30, 60, 180].
+        watermark (str or datetime.date, optional): Only return rows with a date after this value. Can be a string ('YYYY-MM-DD') or a date object.
+    
     Returns:
-        pd.DataFrame: Combined stock data including Date, Stock, Close, and EMA columns.
+        pd.DataFrame: Combined stock data including date, stock, close, and EMA columns.
     """
 
     df_index = []
@@ -85,13 +84,12 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
 def get_current_price(stock_list):
     """
     Fetches the current market price for a list of stock tickers.
-
-    Parameters:
-    - stock_list (list): A list of stock ticker symbols (e.g., ['^AORD', '^AXJO']).
-
+    
+    Args:
+        stock_list (list): A list of stock ticker symbols (e.g., ['^AORD', '^AXJO']).
+    
     Returns:
-    - DataFrame: A DataFrame containing the stock symbol, current market price, and 
-      the UTC datetime when the data was fetched.
+        pd.DataFrame: A DataFrame containing the stock symbol, current market price, and the UTC datetime when the data was fetched.
     """
     data = []
     
@@ -106,15 +104,13 @@ def get_current_price(stock_list):
 def get_dividend_history(stock_list, watermark=None):
     """
     Fetches dividend history for a list of stocks using yfinance.
-
+    
     Args:
-        stock_list (list of str): List of stock tickers (e.g. ['IOZ.AX', 'NDQ.AX']).
-        watermark (str or datetime.date, optional): If provided, filters dividends to only include
-            those after this date. Should be in 'YYYY-MM-DD' format if string.
-
+        stock_list (list of str): List of stock tickers (e.g., ['IOZ.AX', 'NDQ.AX']).
+        watermark (str or datetime.date, optional): If provided, filters dividends to only include those after this date. Should be in 'YYYY-MM-DD' format if string.
+    
     Returns:
-        pandas.DataFrame: A combined dataframe of dividend history with columns:
-            ['Date', 'Stock', 'Dividends'], sorted by date descending.
+        pd.DataFrame: A combined DataFrame of dividend history with columns: ['date', 'stock', 'dividend'], sorted by date descending.
     """
 
     df_index = []
