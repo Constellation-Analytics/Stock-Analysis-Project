@@ -149,17 +149,16 @@ def get_dividend_history(stock_list, watermark=None):
 #                                       Retrieving the data
 # ----------------------------------------------------------------------------------------------------
 
+# Market Info
 index_list = ['^AORD', '^AXJO']
 market_indexs = get_stock_history(index_list, "6y", watermark='2020-01-01')
-
-etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
-my_stocks = get_stock_history(etf_list, "6y", watermark='2020-01-01')
-
-dividends = get_dividend_history(etf_list, watermark='2020-01-01')
-
 market_current_price = get_current_price(index_list)
 
+# My Stocks
+etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
+my_stocks = get_stock_history(etf_list, "6y", watermark='2020-01-01')
 etf_current_price = get_current_price(etf_list)
+dividends = get_dividend_history(etf_list, watermark='2020-01-01')
 
 # ----------------------------------------------------------------------------------------------------
 #                                       Inserting into the database - optimised for testing only
