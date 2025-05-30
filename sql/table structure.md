@@ -2,50 +2,52 @@
 
 ## Market Index
 
-### market_stk_close
+### `market_stk_close`
 
-| Column   | Data Type |
-|----------|-----------|
-| date     | date      |
-| code     | varchar   |
-| close    | int       |
-| EMA 30   | int       |
-| EMA 60   | int       |
-| EMA 180  | int       |
+| Column  | Data Type | Key         |
+|---------|-----------|-------------|
+| date    | date      | Primary Key |
+| code    | varchar   | Primary Key |
+| close   | int       |             |
+| EMA 30  | int       |             |
+| EMA 60  | int       |             |
+| EMA 180 | int       |             |
 
-### market_stk_price
+### `market_stk_price`
 
-| Column        | Data Type |
-|---------------|-----------|
-| stock         | varchar   |
-| price         | int       |
-| datetime_utc  | datetime  |
+| Column       | Data Type | Key         |
+|--------------|-----------|-------------|
+| stock        | varchar   | Primary Key |
+| price        | int       |             |
+| datetime_utc | datetime  |             |
+
+---
 
 ## Personal Index
 
-### personal_stk_close
+### `personal_stk_close`
 
-| Column   | Data Type |
-|----------|-----------|
-| date     | date      |
-| code     | varchar   |
-| close    | int       |
-| EMA 30   | int       |
-| EMA 60   | int       |
-| EMA 180  | int       |
+| Column  | Data Type | Key         |
+|---------|-----------|-------------|
+| date    | date      | Primary Key |
+| code    | varchar   | Primary Key |
+| close   | int       |             |
+| EMA 30  | int       |             |
+| EMA 60  | int       |             |
+| EMA 180 | int       |             |
 
-### personal_stk_price
+### `personal_stk_price`
 
-| Column        | Data Type |
-|---------------|-----------|
-| stock         | varchar   |
-| price         | int       |
-| datetime_utc  | datetime  |
+| Column       | Data Type | Key         |
+|--------------|-----------|-------------|
+| stock        | varchar   | Primary Key |
+| price        | int       |             |
+| datetime_utc | datetime  |             |
 
-### personal_stk_dividend
+### `personal_stk_dividend`
 
-| Column   | Data Type |
-|----------|-----------|
-| date     | date      |
-| stock    | varchar   |
-| dividend | varchar   |
+| Column   | Data Type | Key         |
+|----------|-----------|-------------|
+| date     | date      |             |
+| stock    | varchar   | Primary Key |
+| dividend | varchar   |             |
