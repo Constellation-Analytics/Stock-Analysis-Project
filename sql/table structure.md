@@ -12,10 +12,10 @@
 
 ### personal_stk_price
 
-| Column | Data Type |
-|--------|-----------|
-| stock   | varchar   |
-| price   | int   |
+| Column   | Data Type  |
+|--------  |----------- |
+| stock    | varchar    |
+| price    | int        |
 | datetime_utc  | datetime  |
 
 
