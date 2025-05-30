@@ -11,28 +11,28 @@ NEON_DB = os.getenv("NEON_DB")
 # Create the engine once
 engine = create_engine(NEON_DB)
 
-def insert_to_db(data: pd.DataFrame, table: str, engine, truncate = None):
+def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
     """
-    Inserts stock data into the specified PostgreSQL table.
+    Inserts data into the specified PostgreSQL table.
 
     Parameters:
-    - data (pd.DataFrame): DataFrame with columns: 'Date', 'Stock', 'Close', 'EMA_30', 'EMA_60', 'EMA_180'.
+    - data (pd.DataFrame): DataFrame to insert.
     - table (str): Name of the target table.
     - engine: SQLAlchemy engine object.
     - truncate (bool): If True, truncates the table before inserting new data.
 
-    The function adds a 'date_entered' timestamp before inserting.
+    Adds a 'date_entered' column with the current UTC timestamp before inserting.
     """
     data = data.copy()
-    data['date_entered'] = datetime.now()
-    data.columns = ['date', 'stock', 'close', 'ema30', 'ema60', 'ema180', 'date_entered']
+    data['date_entered'] = datetime.now(timezone.utc)
 
     if truncate:
         with engine.begin() as conn:
             conn.execute(f'TRUNCATE TABLE {table}')
-        
+
     with engine.connect() as connection:
         data.to_sql(table, connection, if_exists="append", index=False)
+
 
 def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     """
