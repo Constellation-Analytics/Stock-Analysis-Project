@@ -8,8 +8,12 @@ from sqlalchemy import create_engine
 # Load environment variables from GitHub Secrets
 NEON_DB = os.getenv("NEON_DB")
 
-# Create the engine once
+# Create the engine
 engine = create_engine(NEON_DB)
+
+# ----------------------------------------------------------------------------------------------------
+#                                       Defining functions
+# ----------------------------------------------------------------------------------------------------
 
 def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
     """
@@ -20,15 +24,10 @@ def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False)
     - table (str): Name of the target table.
     - engine: SQLAlchemy engine object.
     - truncate (bool): If True, truncates the table before inserting new data.
-
-    Adds a 'date_entered' column with the current UTC timestamp before inserting.
     """
-    data = data.copy()
-    data['date_entered'] = datetime.now(timezone.utc)
-
     if truncate:
         with engine.begin() as conn:
-            conn.execute(f'TRUNCATE TABLE {table}')
+            conn.execute(text(f'TRUNCATE TABLE {table}'))
 
     with engine.connect() as connection:
         data.to_sql(table, connection, if_exists="append", index=False)
@@ -58,11 +57,14 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
         df['Stock'] = stock
         df.reset_index(inplace=True)
         df['Date'] = df['Date'].dt.date
-        df = df[['Date', 'Stock', 'Close']]
+        df['date_entered'] = datetime.now(timezone.utc)
+
+        df = df[['Date', 'Stock', 'Close','date_entered']]
+        df.columns = ['date', 'stock', 'close','date_entered']
 
         # Add EMA columns
         for span in spans:
-            df[f'EMA_{span}'] = df['Close'].ewm(span=span, adjust=False).mean()
+            df[f'ema_{span}'] = df['close'].ewm(span=span, adjust=False).mean()
 
         df_index.append(df)
 
@@ -73,10 +75,10 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     if watermark:
         if isinstance(watermark, str):
             watermark = datetime.strptime(watermark, '%Y-%m-%d').date()
-        df_all = df_all[df_all['Date'] > watermark]
+        df_all = df_all[df_all['date'] > watermark]
 
     # Sort by date (descending) and reset index
-    df_all = df_all.sort_values(by='Date', ascending=False).reset_index(drop=True)
+    df_all = df_all.sort_values(by='date', ascending=False).reset_index(drop=True)
     
     return df_all
 
@@ -124,6 +126,9 @@ def get_dividend_history(stock_list, watermark=None):
         df['Date'] = df['Date'].dt.date
         df['Stock'] = stock
         df = df[['Date', 'Stock', 'Dividends']]
+        df.columns = ['date', 'stock', 'dividend']
+
+        
         df_index.append(df)
 
     # Combine all stock data
@@ -133,9 +138,36 @@ def get_dividend_history(stock_list, watermark=None):
     if watermark:
         if isinstance(watermark, str):
             watermark = datetime.strptime(watermark, '%Y-%m-%d').date()
-        df_all = df_all[df_all['Date'] > watermark]
+        df_all = df_all[df_all['date'] > watermark]
 
     # Sort by date (descending) and reset index
-    df_all = df_all.sort_values(by='Date', ascending=False).reset_index(drop=True)
+    df_all = df_all.sort_values(by='date', ascending=False).reset_index(drop=True)
     
     return df_all
+
+# ----------------------------------------------------------------------------------------------------
+#                                       Retrieving the data
+# ----------------------------------------------------------------------------------------------------
+
+index_list = ['^AORD', '^AXJO']
+market_indexs = get_stock_history(index_list, "6y", watermark='2020-01-01')
+
+etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
+my_stocks = get_stock_history(etf_list, "6y", watermark='2020-01-01')
+
+dividends = get_dividend_history(etf_list, watermark='2020-01-01')
+
+market_current_price = get_current_price(index_list)
+
+etf_current_price = get_current_price(etf_list)
+
+# ----------------------------------------------------------------------------------------------------
+#                                       Inserting into the database - optimised for testing only
+# ----------------------------------------------------------------------------------------------------
+
+#insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
+insert_to_db(market_indexs,'market_stk_close',engine,True)
+insert_to_db(my_stocks,'personal_stk_close',engine,True)
+insert_to_db(dividends,'personal_stk_dividend',engine,True)
+insert_to_db(market_current_price,'market_stk_price',engine,True)
+insert_to_db(etf_current_price,'personal_stk_price',engine,True)
