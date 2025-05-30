@@ -1,10 +1,40 @@
+CREATE TABLE IF NOT EXISTS market_stk_close (
+    date DATE,
+    code VARCHAR(50),
+    close INTEGER,
+    ema_30 INTEGER,
+    ema_60 INTEGER,
+    ema_180 INTEGER,
+    CONSTRAINT pk_market_stk_close PRIMARY KEY (date, code)
+);
 
--- stk_personal
-CREATE TABLE IF NOT EXISTS stk_personal(date date, code varchar, close int, ema30 int, ema60 int, ema180 int, date_entered date);
-ALTER TABLE "public"."stk_personal"
-ADD CONSTRAINT "pk_stk_personal" PRIMARY KEY ("date", "code")
-  
--- stk_market
-CREATE TABLE IF NOT EXISTS stk_market(date date, code varchar, close int, ema30 int, ema60 int, ema180 int, date_entered date);
-ALTER TABLE "public"."stk_market"
-ADD CONSTRAINT "pk_stk_market" PRIMARY KEY ("date", "code")
+CREATE TABLE IF NOT EXISTS market_stk_price (
+    stock VARCHAR(50),
+    price INTEGER,
+    datetime_utc TIMESTAMP,
+    CONSTRAINT pk_market_stk_price PRIMARY KEY (stock)
+);
+
+CREATE TABLE IF NOT EXISTS personal_stk_close (
+    date DATE,
+    code VARCHAR(50),
+    close INTEGER,
+    ema_30 INTEGER,
+    ema_60 INTEGER,
+    ema_180 INTEGER,
+    CONSTRAINT pk_personal_stk_close PRIMARY KEY (date, code)
+);
+
+CREATE TABLE IF NOT EXISTS personal_stk_price (
+    stock VARCHAR(50),
+    price INTEGER,
+    datetime_utc TIMESTAMP,
+    CONSTRAINT pk_personal_stk_price PRIMARY KEY (stock)
+);
+
+CREATE TABLE IF NOT EXISTS personal_stk_dividend (
+    date DATE,
+    stock VARCHAR(50),
+    dividend VARCHAR(50),
+    CONSTRAINT pk_personal_stk_dividend PRIMARY KEY (stock)
+);
