@@ -193,6 +193,18 @@ get_current_price(index_list)
 #### Dividends history
 ```python
 def get_dividend_history(stock_list, watermark=None):
+    """
+    Fetches dividend history for a list of stocks using yfinance.
+
+    Args:
+        stock_list (list of str): List of stock tickers (e.g. ['IOZ.AX', 'NDQ.AX']).
+        watermark (str or datetime.date, optional): If provided, filters dividends to only include
+            those after this date. Should be in 'YYYY-MM-DD' format if string.
+
+    Returns:
+        pandas.DataFrame: A combined dataframe of dividend history with columns:
+            ['Date', 'Stock', 'Dividends'], sorted by date descending.
+    """
 
     df_index = []
 
