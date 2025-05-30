@@ -96,7 +96,7 @@ get_current_price(index_list)
 ```
 
 ## My Portfolio:
-What we need: [Current price, Historical Data, Dividends history, Last close price]
+What we need: [Historical Data, Current price, Dividends history, Last close price]
  
 #### Current price
 ```python
