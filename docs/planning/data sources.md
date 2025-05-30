@@ -192,17 +192,34 @@ get_current_price(index_list)
 
 #### Dividends history
 ```python
-import yfinance as yf
+def get_dividend_history(stock_list, watermark=None):
 
-#Print the dividend history for each stock
-my_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
+    df_index = []
 
-for stock in my_list:
-    try:
-        ticker = yf.Ticker(stock)
-        div = ticker.dividends
-        print(f"{stock}: {div}")
+    for stock in stock_list:
+        tick = yf.Ticker(stock)
+        div = tick.dividends
+        df = div.reset_index()
+        df['Date'] = df['Date'].dt.date
+        df['Stock'] = stock
+        df = df[['Date', 'Stock', 'Dividends']]
+        df_index.append(df)
 
-    except Exception as e:
-        print(f"{stock}: Error - {e}")
+    # Combine all stock data
+    df_all = pd.concat(df_index, ignore_index=True)
+
+    # Filter by watermark if provided
+    if watermark:
+        if isinstance(watermark, str):
+            watermark = datetime.strptime(watermark, '%Y-%m-%d').date()
+        df_all = df_all[df_all['Date'] > watermark]
+
+    # Sort by date (descending) and reset index
+    df_all = df_all.sort_values(by='Date', ascending=False).reset_index(drop=True)
+    
+    return df_all
+
+# Example usage
+index_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
+get_dividend_history(index_list)
 ```
