@@ -13,7 +13,15 @@
 | EMA 60 | int       |
 | EMA 180| int       |
 
-## Market Index
+### market_stk_price
+
+| Column   | Data Type  |
+|--------  |----------- |
+| stock    | varchar    |
+| price    | int        |
+| datetime_utc  | datetime  |
+
+## Personal Index
 
 ### personal_stk_close
 
