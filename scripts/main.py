@@ -163,24 +163,26 @@ def get_dividend_history(stock_list, watermark=None):
 
 # Market Info
 index_list = ['^AORD', '^AXJO']
-market_indexs = get_stock_history(index_list, "6y", watermark='2020-01-01')
 market_current_price = get_current_price(index_list)
 market_watermark = get_max_date('date', 'market_stk_close')
+market_indexs = get_stock_history(index_list, "6y", watermark=market_watermark)
 
 # My Stocks
 etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
-my_stocks = get_stock_history(etf_list, "6y", watermark='2020-01-01')
-etf_current_price = get_current_price(etf_list)
-dividends = get_dividend_history(etf_list, watermark='2020-01-01')
 personal_watermark = get_max_date('date', 'personal_stk_close')
+my_stocks = get_stock_history(etf_list, "6y", watermark=personal_watermark)
+etf_current_price = get_current_price(etf_list)
+
+dividend_watermark = get_max_date('date', 'personal_stk_dividend')
+dividends = get_dividend_history(etf_list, watermark=dividend_watermark)
 
 # ----------------------------------------------------------------------------------------------------
 #                                       Inserting into the database - optimised for testing only
 # ----------------------------------------------------------------------------------------------------
 
 #insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
-insert_to_db(market_indexs,'market_stk_close',engine,True)
-insert_to_db(my_stocks,'personal_stk_close',engine,True)
-insert_to_db(dividends,'personal_stk_dividend',engine,True)
+insert_to_db(market_indexs,'market_stk_close',engine)
+insert_to_db(my_stocks,'personal_stk_close',engine)
+insert_to_db(dividends,'personal_stk_dividend',engine)
 insert_to_db(market_current_price,'market_stk_price',engine,True)
 insert_to_db(etf_current_price,'personal_stk_price',engine,True)
