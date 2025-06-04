@@ -25,4 +25,4 @@ jobs:
       - name: Run script
         env:
           NEON_DB: ${{ secrets.NEON_DB }}
-        run: python main.py
+        run: python scripts/main.py
