@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 import yfinance as yf
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 # Load environment variables from GitHub Secrets
 NEON_DB = os.getenv("NEON_DB")
@@ -165,12 +165,14 @@ def get_dividend_history(stock_list, watermark=None):
 index_list = ['^AORD', '^AXJO']
 market_indexs = get_stock_history(index_list, "6y", watermark='2020-01-01')
 market_current_price = get_current_price(index_list)
+market_watermark = get_max_date('date', 'market_stk_close')
 
 # My Stocks
 etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
 my_stocks = get_stock_history(etf_list, "6y", watermark='2020-01-01')
 etf_current_price = get_current_price(etf_list)
 dividends = get_dividend_history(etf_list, watermark='2020-01-01')
+personal_watermark = get_max_date('date', 'personal_stk_close')
 
 # ----------------------------------------------------------------------------------------------------
 #                                       Inserting into the database - optimised for testing only
