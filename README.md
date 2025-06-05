@@ -12,7 +12,7 @@ This is a full end-to-end **cloud-based** data pipeline project that tracks the 
   - Growth over time
   - Comparison against market indices (ASX200, All Ordinaries)
 - Monitor dividends
-  - Dividends paid — value, frequency, and averages
+  - Dividends paid: value, frequency, and averages
   - Forecast next dividend dates
 - Design logic to eventually trigger alerts for:
   - Large variances from moving averages
