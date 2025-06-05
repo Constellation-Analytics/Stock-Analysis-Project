@@ -33,6 +33,7 @@ This is a full end-to-end **cloud-based** data pipeline project that tracks the 
 |----------------|----------------------------------|
 | `yfinance`     | Fetches historical stock data via Yahoo Finance API |
 | `pandas`       | Cleans and transforms financial data |
+| `SQLAlchemy`   | Connects Python to the PostgreSQL database |
 | `Neon`         | Cloud-based PostgreSQL database for storing stock data |
 | `GitHub Actions` | Automates scheduled data refresh jobs |
 | `Power BI`     | Creates interactive dashboards to visualize portfolio and market trends |
