@@ -36,7 +36,7 @@ This is a full end-to-end **cloud-based** data pipeline project that tracks the 
 | `SQLAlchemy`   | Connects Python to the PostgreSQL database |
 | `Neon`         | Cloud-based PostgreSQL database for storing stock data |
 | `GitHub Actions` | Automates scheduled data refresh jobs |
-| `Power BI`     | Creates interactive dashboards to visualize portfolio and market trends |
+| `Power BI`     | Creates interactive dashboards to visualise portfolio and market trends |
 
 ---
 
@@ -58,7 +58,7 @@ This is a full end-to-end **cloud-based** data pipeline project that tracks the 
      - What’s the average payout?
      - What’s the dividend frequency?
 
-4. **Data Visualization**
+4. **Data Visualisation**
    - Power BI dashboards surface insights like:
      - Personal stock performance vs. market indices
      - Dividend history
