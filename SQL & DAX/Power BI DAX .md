@@ -1,6 +1,6 @@
 
-#### Historical Data
-```d
+##### Calculate column - previous close
+```sql
 lastclose = 
 VAR vRelation = SUMMARIZECOLUMNS ( 
                     market_stk_close[stock], 
@@ -12,7 +12,7 @@ SELECTCOLUMNS (
     OFFSET (
         -1,
         vRelation,
-        ORDERBY (market_stk_close[date], DESC),
+        ORDERBY (market_stk_close[date], ASC),
         PARTITIONBY (market_stk_close[stock])
     ),
     [previousclose]
