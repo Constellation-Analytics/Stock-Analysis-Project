@@ -18,3 +18,10 @@ SELECTCOLUMNS (
     [previousclose]
 )
 ```
+
+##### Measure - Calculate change %
+```sql
+mkt_change % = DIVIDE(
+    SUM(market_stk_close[stock])-SUM(market_stk_close[previous_close]),
+    SUM(market_stk_close[stock]))
+```
