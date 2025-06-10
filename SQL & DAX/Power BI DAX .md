@@ -1,27 +1,47 @@
-
-##### Calculate column - previous close (same logic applied to market and personal)
-```sql
-previous_close = 
-VAR vRelation = SUMMARIZECOLUMNS ( 
-                    market_stk_close[stock], 
-                    market_stk_close[date], 
-                    "previousclose", SUM(market_stk_close[close]) 
-                  )
-RETURN
-SELECTCOLUMNS (
-    OFFSET (
-        -1,
-        vRelation,
-        ORDERBY (market_stk_close[date], ASC),
-        PARTITIONBY (market_stk_close[stock])
-    ),
-    [previousclose]
-)
-```
-
 ##### Measure - Calculate change %
 ```sql
-mkt_change % = DIVIDE(
-    SUM(market_stk_close[stock])-SUM(market_stk_close[previous_close]),
-    SUM(market_stk_close[stock]))
+market_change % = 
+VAR minDateWithData =
+    CALCULATE (
+        MIN ( 'Previous Dates'[Date] ),
+        FILTER (
+            ALLSELECTED ( 'Previous Dates' ),
+            NOT ISBLANK ( [market_close] )
+        )
+    )
+
+VAR maxDateWithData =
+    CALCULATE (
+        MAX ( 'Previous Dates'[Date] ),
+        FILTER (
+            ALLSELECTED ( 'Previous Dates' ),
+            NOT ISBLANK ( [market_close] )
+        )
+    )
+
+VAR minValue =
+    CALCULATE (
+        [market_close],
+        FILTER (
+            ALL ( 'Previous Dates' ),
+            'Previous Dates'[Date] = minDateWithData
+        )
+    )
+
+VAR maxValue =
+    CALCULATE (
+        [market_close],
+        FILTER (
+            ALL ( 'Previous Dates' ),
+            'Previous Dates'[Date] = maxDateWithData
+        )
+    )
+
+RETURN
+    IF (
+        ISBLANK ( [market_close] ),
+        BLANK(),
+        DIVIDE ( maxValue - minValue, minValue )
+    )
+
 ```
