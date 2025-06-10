@@ -1,3 +1,6 @@
+
+#### Historical Data
+```dax
 lastclose = 
 VAR vRelation = SUMMARIZECOLUMNS ( 
                     market_stk_close[stock], 
@@ -14,3 +17,5 @@ SELECTCOLUMNS (
     ),
     [previousclose]
 )
+
+```
