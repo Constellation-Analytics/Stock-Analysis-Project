@@ -1,7 +1,7 @@
 
-##### Calculate column - previous close
+##### Calculate column - previous close (same logic applied to market and personal)
 ```sql
-lastclose = 
+previous_close = 
 VAR vRelation = SUMMARIZECOLUMNS ( 
                     market_stk_close[stock], 
                     market_stk_close[date], 
@@ -17,5 +17,4 @@ SELECTCOLUMNS (
     ),
     [previousclose]
 )
-
 ```
