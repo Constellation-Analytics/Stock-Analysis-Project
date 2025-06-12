@@ -94,9 +94,6 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
 
         df_index.append(df)
 
-        # Be polite to the API
-        time.sleep(1)
-
     # Combine all stock data
     df_all = pd.concat(df_index, ignore_index=True)
 
