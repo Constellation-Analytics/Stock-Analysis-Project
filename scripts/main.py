@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime, timezone
 
 import pandas as pd
@@ -10,6 +11,14 @@ NEON_DB = os.getenv("NEON_DB")
 
 # Create the engine
 engine = create_engine(NEON_DB)
+
+# Set up logging 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------------------------------------------------
 #                                       Defining functions
@@ -69,6 +78,7 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
     for stock in stock_list:
         tick = yf.Ticker(stock)
         df = tick.history(period=period)
+        
         df['Stock'] = stock
         df.reset_index(inplace=True)
         df['Date'] = df['Date'].dt.date
@@ -111,7 +121,7 @@ def get_current_price(stock_list):
     
     for stock in stock_list:
         tick = yf.Ticker(stock)
-        price = tick.info.get("regularMarketPrice")
+        price = tick.fast_info["last_price"]
         now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         data.append({"stock": stock, "price": price, "datetime_utc": now_utc})
     
@@ -139,8 +149,6 @@ def get_dividend_history(stock_list, watermark=None):
         df['Stock'] = stock
         df = df[['Date', 'Stock', 'Dividends']]
         df.columns = ['date', 'stock', 'dividend']
-
-        
         df_index.append(df)
 
     # Combine all stock data
@@ -158,26 +166,48 @@ def get_dividend_history(stock_list, watermark=None):
     return df_all
 
 # ----------------------------------------------------------------------------------------------------
-#                                       Retrieving the data
+#                                     Retrieving the data with logging
 # ----------------------------------------------------------------------------------------------------
 
 # Market Info
 index_list = ['^AORD', '^AXJO']
+
+logger.info("Fetching current prices for market indices")
 market_current_price = get_current_price(index_list)
+logger.info(market_current_price)
+
 market_watermark = get_max_date('date', 'market_stk_close')
+logger.info(f"Market watermark: {market_watermark}")
+
+logger.info("Fetching market history")
 market_indexs = get_stock_history(index_list, "6y", watermark=market_watermark)
+logger.info(f"Market index history rows: {len(market_indexs)}")
+logger.info(f"Market index history: {market_indexs}")
 
 # My Stocks
 etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
-personal_watermark = get_max_date('date', 'personal_stk_close')
-my_stocks = get_stock_history(etf_list, "6y", watermark=personal_watermark)
+
+logger.info("Fetching current prices for market indices")
 etf_current_price = get_current_price(etf_list)
+logger.info(etf_current_price)
+
+personal_watermark = get_max_date('date', 'personal_stk_close')
+logger.info(f"Personal watermark: {personal_watermark}")
+
+logger.info("Fetching personal stock history")
+my_stocks = get_stock_history(etf_list, "6y", watermark=personal_watermark)
+logger.info(f"Personal stock history rows: {len(my_stocks)}")
+logger.info(f"Personal stock history: {my_stocks}")
 
 dividend_watermark = get_max_date('date', 'personal_stk_dividend')
+logger.info(f"Dividend watermark: {dividend_watermark}")
+
 dividends = get_dividend_history(etf_list, watermark=dividend_watermark)
+logger.info(f"Dividend history rows: {len(dividends)}")
+logger.info(f"Dividend history: {dividends}")
 
 # ----------------------------------------------------------------------------------------------------
-#                                       Inserting into the database - optimised for testing only
+#                        Inserting into the database - optimised for testing only
 # ----------------------------------------------------------------------------------------------------
 
 #insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
