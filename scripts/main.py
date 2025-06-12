@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime, timezone
 
 import pandas as pd
@@ -10,6 +11,14 @@ NEON_DB = os.getenv("NEON_DB")
 
 # Create the engine
 engine = create_engine(NEON_DB)
+
+# Set up logging 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------------------------------------------------
 #                                       Defining functions
@@ -139,9 +148,9 @@ def get_dividend_history(stock_list, watermark=None):
         df['Stock'] = stock
         df = df[['Date', 'Stock', 'Dividends']]
         df.columns = ['date', 'stock', 'dividend']
-
-        
         df_index.append(df)
+        if df.empty:
+            logger.warning(f"No data returned for stock: {stock}")
 
     # Combine all stock data
     df_all = pd.concat(df_index, ignore_index=True)
@@ -158,14 +167,22 @@ def get_dividend_history(stock_list, watermark=None):
     return df_all
 
 # ----------------------------------------------------------------------------------------------------
-#                                       Retrieving the data
+#                                     Retrieving the data with logging
 # ----------------------------------------------------------------------------------------------------
 
 # Market Info
 index_list = ['^AORD', '^AXJO']
+
+logger.info("Fetching current prices for market indices")
 market_current_price = get_current_price(index_list)
+logger.info(market_current_price)
+
 market_watermark = get_max_date('date', 'market_stk_close')
+logger.info(f"Market watermark: {market_watermark}")
+
+logger.info("Fetching market history")
 market_indexs = get_stock_history(index_list, "6y", watermark=market_watermark)
+logger.info(f"Market index history rows: {len(market_indexs)}")
 
 # My Stocks
 etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
@@ -177,7 +194,7 @@ dividend_watermark = get_max_date('date', 'personal_stk_dividend')
 dividends = get_dividend_history(etf_list, watermark=dividend_watermark)
 
 # ----------------------------------------------------------------------------------------------------
-#                                       Inserting into the database - optimised for testing only
+#                        Inserting into the database - optimised for testing only
 # ----------------------------------------------------------------------------------------------------
 
 #insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
