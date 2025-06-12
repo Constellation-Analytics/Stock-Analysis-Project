@@ -211,7 +211,7 @@ logger.info(f"Dividend history: {dividends}")
 # ----------------------------------------------------------------------------------------------------
 
 #insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False):
-logger.info("Inserting data into the database (If applicable")
+logger.info("Inserting data into the database (If applicable)")
 insert_to_db(market_indexs,'market_stk_close',engine)
 insert_to_db(my_stocks,'personal_stk_close',engine)
 insert_to_db(dividends,'personal_stk_dividend',engine)
