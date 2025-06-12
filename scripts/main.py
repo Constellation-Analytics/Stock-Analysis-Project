@@ -183,15 +183,29 @@ logger.info(f"Market watermark: {market_watermark}")
 logger.info("Fetching market history")
 market_indexs = get_stock_history(index_list, "6y", watermark=market_watermark)
 logger.info(f"Market index history rows: {len(market_indexs)}")
+logger.info(f"Market index history: {market_indexs}")
 
 # My Stocks
 etf_list = ['ETHI.AX', 'IEM.AX', 'IOO.AX', 'IOZ.AX','IXJ.AX','NDQ.AX','SYI.AX']
-personal_watermark = get_max_date('date', 'personal_stk_close')
-my_stocks = get_stock_history(etf_list, "6y", watermark=personal_watermark)
+
+logger.info("Fetching current prices for market indices")
 etf_current_price = get_current_price(etf_list)
+logger.info(etf_current_price)
+
+personal_watermark = get_max_date('date', 'personal_stk_close')
+logger.info(f"Personal watermark: {personal_watermark}")
+
+logger.info("Fetching personal stock history")
+my_stocks = get_stock_history(etf_list, "6y", watermark=personal_watermark)
+logger.info(f"Personal stock history rows: {len(my_stocks)}")
+logger.info(f"Personal stock history: {my_stocks}")
 
 dividend_watermark = get_max_date('date', 'personal_stk_dividend')
+logger.info(f"Dividend watermark: {dividend_watermark}")
+
 dividends = get_dividend_history(etf_list, watermark=dividend_watermark)
+logger.info(f"Dividend history rows: {len(dividends)}")
+logger.info(f"Dividend history: {dividends}")
 
 # ----------------------------------------------------------------------------------------------------
 #                        Inserting into the database - optimised for testing only
