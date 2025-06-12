@@ -77,7 +77,6 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
 
     for stock in stock_list:
         tick = yf.Ticker(stock)
-        logger.info(f"Fetching history for {stock}")
         df = tick.history(period=period)
         
         df['Stock'] = stock
