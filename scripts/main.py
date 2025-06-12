@@ -122,7 +122,7 @@ def get_current_price(stock_list):
     
     for stock in stock_list:
         tick = yf.Ticker(stock)
-        price = tick.info.get("regularMarketPrice")
+        price = tick.fast_info["last_price"]
         now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
         data.append({"stock": stock, "price": price, "datetime_utc": now_utc})
     
