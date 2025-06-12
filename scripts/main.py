@@ -77,7 +77,9 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
 
     for stock in stock_list:
         tick = yf.Ticker(stock)
+        logger.info(f"Fetching history for {stock}")
         df = tick.history(period=period)
+        
         df['Stock'] = stock
         df.reset_index(inplace=True)
         df['Date'] = df['Date'].dt.date
@@ -91,6 +93,9 @@ def get_stock_history(stock_list, period, spans=[30, 60, 180], watermark=None):
             df[f'ema_{span}'] = df['close'].ewm(span=span, adjust=False).mean()
 
         df_index.append(df)
+
+        # Be polite to the API
+        time.sleep(1)
 
     # Combine all stock data
     df_all = pd.concat(df_index, ignore_index=True)
@@ -149,8 +154,6 @@ def get_dividend_history(stock_list, watermark=None):
         df = df[['Date', 'Stock', 'Dividends']]
         df.columns = ['date', 'stock', 'dividend']
         df_index.append(df)
-        if df.empty:
-            logger.warning(f"No data returned for stock: {stock}")
 
     # Combine all stock data
     df_all = pd.concat(df_index, ignore_index=True)
