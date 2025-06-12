@@ -35,11 +35,14 @@ def insert_to_db(data: pd.DataFrame, table: str, engine, truncate: bool = False)
         truncate (bool, optional): If True, truncates the table before inserting new data. Defaults to False.
     """
     if truncate:
+        logger.info(f"Truncating: {table}")
         with engine.begin() as conn:
             conn.execute(text(f'TRUNCATE TABLE {table}'))
 
     with engine.connect() as connection:
         data.to_sql(table, connection, if_exists="append", index=False)
+
+    logger.info(f"Inserting: {len(data)} rows, into {table}")
 
 def get_max_date(column: str, table: str):
     """
@@ -216,3 +219,5 @@ insert_to_db(my_stocks,'personal_stk_close',engine)
 insert_to_db(dividends,'personal_stk_dividend',engine)
 insert_to_db(market_current_price,'market_stk_price',engine,True)
 insert_to_db(etf_current_price,'personal_stk_price',engine,True)
+
+logger.info("Script complete")
